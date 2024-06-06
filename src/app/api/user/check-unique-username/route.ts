@@ -40,13 +40,13 @@ export const GET = catchAsyncRoute(async (req: NextRequest) => {
 
   if (!user) {
     return sendApiResponse({
-      message: "Username is available",
+      message: "username is available",
       statusCode: 200,
       success: true,
     });
   } else {
     return sendApiResponse({
-      message: "Username is already taken",
+      message: "username is already taken",
       statusCode: 400,
       success: false,
     });
