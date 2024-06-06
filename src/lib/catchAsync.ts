@@ -25,7 +25,7 @@ export function catchAsyncRoute(fn: Function) {
 }
 
 export function catchAsyncRouteWithSession(fn: Function) {
-  return async (req: NextRequest, res: NextResponse) => {
+  return async (req: NextRequest, { params }: any) => {
     await dbConnect();
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {
@@ -36,7 +36,7 @@ export function catchAsyncRouteWithSession(fn: Function) {
       });
     }
     try {
-      return await fn(req, res, session);
+      return await fn(req, session, params);
     } catch (error: any) {
       console.error(error);
       return NextResponse.json(

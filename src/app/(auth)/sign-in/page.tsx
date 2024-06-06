@@ -18,8 +18,13 @@ import { Typography, typographyVariants } from "@/components/ui/typography";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function SignInPage() {
+  const { toast } = useToast();
+  const router = useRouter();
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -30,9 +35,22 @@ function SignInPage() {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signInSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    const res = await signIn("credentials", {
+      identifier: values.identifier,
+      password: values.password,
+      redirect: false,
+    });
+    console.log(res);
+    if (res?.error) {
+      toast({
+        title: "Sign in failed",
+        description: res.error,
+        variant: "destructive",
+      });
+    }
+    if (res?.url) {
+      router.replace("/dashboard");
+    }
   }
   return (
     <Form {...form}>
@@ -45,11 +63,10 @@ function SignInPage() {
           name="identifier"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Email/Username</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your username" {...field} />
+                <Input placeholder="Enter your email or username" {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}

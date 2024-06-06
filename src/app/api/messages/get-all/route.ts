@@ -4,10 +4,10 @@ import { UserModel } from "@/models/User";
 import { IMessage } from "@/types/interfaces";
 import mongoose from "mongoose";
 import { Session } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const GET = catchAsyncRouteWithSession(
-  async (req: NextRequest, _: NextResponse, session: Session) => {
+  async (req: NextRequest, session: Session) => {
     const _id = new mongoose.Types.ObjectId(session?.user?._id);
     const user = await UserModel.aggregate([
       { $match: { _id } },

@@ -40,6 +40,10 @@ function VerifyPage() {
         code: values.code,
         username,
       });
+      toast({
+        title: "Verified successfully",
+        description: "Your account has been verified",
+      });
       router.replace(`/sign-in`);
     } catch (error) {
       toast({

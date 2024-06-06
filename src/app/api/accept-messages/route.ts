@@ -6,7 +6,7 @@ import { UserModel } from "@/models/User";
 import { IUser } from "@/types/interfaces";
 
 export const POST = catchAsyncRouteWithSession(
-  async (req: NextRequest, _: NextResponse, session: Session) => {
+  async (req: NextRequest, session: Session) => {
     const userId = session?.user?._id as string;
     const { isAcceptingMessages } = await req.json();
     if (!isAcceptingMessages) {
@@ -41,7 +41,7 @@ export const POST = catchAsyncRouteWithSession(
 );
 
 export const GET = catchAsyncRouteWithSession(
-  async (_: NextRequest, __: NextResponse, sessions: Session) => {
+  async (_: NextRequest, sessions: Session) => {
     const userId = sessions?.user?._id as string;
     const user = await UserModel.findById(userId);
     if (!user) {

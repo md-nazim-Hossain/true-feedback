@@ -1,6 +1,7 @@
 import { Document } from "mongoose";
 
 export interface IMessage {
+  _id: string;
   content: string;
   createdAt: string;
 }
